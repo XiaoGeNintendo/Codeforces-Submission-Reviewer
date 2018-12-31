@@ -4,27 +4,46 @@
 		<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
         <script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
         <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
-        <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+		<script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+		<link rel="stylesheet" type="text/css" href="index.css">
+
 	</head>
 	
 	
 	
 	<center>
-		<h1>Codeforces Submission Checker</h1>
-		<input id="user" placeholder="CF Username"></input>
+		<h1 class="text">Codeforces Submission Checker</h1>
+		<h2 class="text">By XGN from HellHoleStudios 2018-2019</h2>
+		<input id="user" placeholder="CF Username" class="text"></input>
 		
-		<button onclick="fetch()">Click to fetch CF Data</button>
-		<button onclick="clears()">Clear</button>
-		<button onclick="enableFuzzyF()">Toggle Fuzzy Matching</button>
+		<button onclick="fetch()" class="text bold">Click to fetch CF Data</button>
+		<button onclick="clears()" class="text bold" >Clear</button>
+		<button onclick="enableFuzzyF()" class="text bold">Toggle Fuzzy Matching</button>
 		<hr/>
 	</center>
-	<b id="message">Abort</b>
+	<b id="message" class="text">Abort</b>
 	<hr/>
-	<div id="pie" style="display:none"></div>
-	<div id="verdict" style="display:none"></div>
-	<div id="point" style="display:none"></div>
-	<div id="tag" style="display:none"></div>
-	<div id="ptc" style="display:none"></div>
-	
+
+	<center>
+		<div id="pie" style="display:none"></div>
+		<div id="verdict" style="display:none"></div>
+		<div id="point" style="display:none"></div>
+		<div id="tag" style="display:none"></div>
+		<div id="ptc" style="display:none"></div>
+	</center>
+
+	<hr/>
+
+	<div id="rating" style="display:none" class="text">
+		<center>
+			<b>User Submission Rating</b><br/>
+			
+			Language Rating: <p id="langrating" ></p> <br/>
+			Point Rating: <p id="pointrating"></p> <br/>
+			Activity Rating:<h2 id="actrating"></h2>
+		</center>
+
+	</div>
+
 	<script src="index.js"></script>
 </html> 

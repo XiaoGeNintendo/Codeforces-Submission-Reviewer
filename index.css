@@ -1,0 +1,20 @@
+
+/*
+    PixelMPlus License:特に表記の必要はありません。
+*/
+@font-face {
+    font-family: 'pmp';
+    src: url('PixelMplus12-Regular.ttf') format("truetype");
+} 
+
+.text{
+    font-family:'pmp'
+}
+
+.bold{
+    font-weight: bold
+}
+
+.green{
+    color:green
+}

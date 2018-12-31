@@ -6,6 +6,11 @@ var pie=document.getElementById("pie")
 var verdict=document.getElementById("verdict")
 var tag=document.getElementById("tag")
 var ptc=document.getElementById("ptc")
+var rating=document.getElementById("rating")
+
+var langrating=document.getElementById("langrating")
+var pointrating=document.getElementById("pointrating")
+var actrating=document.getElementById("actrating")
 
 var enableFuzzy=false
 
@@ -238,6 +243,97 @@ function fuzzy(str){
 	}
 }
 
+/*
+	n is the total language the user uses
+	We call a language "main language" if an user submits more than 1/n of his total submission.
+	We call a language "side language" otherwise
+	the points we get for each main language is [10,30,50,65,80]
+	for each side language we get [1,2,3,4,5,7,9,11,13,15]
+*/
+function parseLanguageRating(dict,totsub){
+	var langcount=0
+	for(x in dict){
+		langcount++;
+	}
+
+	var mainlc=0,sidelc=0;
+	var mainls=[];
+	for(x in dict){
+		if(dict[x]>=(1/langcount)*totsub){
+			mainlc++;
+			mainls.push(x);
+		}else{
+			sidelc++;
+		}
+	}
+
+	var totscore=0
+	var smain=[0,10,30,50,65,80,90,100]
+	var sside=[0,3,5,7,9,11,13,15,17,20]
+	if(mainlc>=smain.length){
+		totscore+=100;
+	}else{
+		totscore+=smain[mainlc];
+	}
+
+	if(sidelc>=sside.length){
+		totscore+=20;
+	}else{
+		totscore+=sside[sidelc];
+	}
+
+	langrating.innerHTML=totscore+"/120.Main language(s):"+mainls
+	langrating.style.color=toColor(totscore/120)
+}
+
+function colorRGB2Hex(color) {
+    var rgb = color.split(',');
+    var r = parseInt(rgb[0].split('(')[1]);
+    var g = parseInt(rgb[1]);
+    var b = parseInt(rgb[2].split(')')[0]);
+ 
+    var hex = "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    return hex;
+ }
+
+function toColor(frac){
+	var r=parseInt((1-frac)*255)
+	var g=parseInt(frac*255)
+	var b=0
+	return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+function parsePointRating(dict,totsub){
+	var totpts=0
+	var mxpts=4000
+	for(x in dict){
+		if(x!="undefined"){
+			totpts+=dict[x]*parseInt(x)
+			mxpts=Math.max(mxpts,parseInt(x))
+		}else{
+			totpts+=dict[x]*4000
+		}
+	}
+
+	var score=parseInt(totpts/totsub)
+	pointrating.innerHTML=score+"/"+mxpts+"."
+	pointrating.style.color=toColor(score/mxpts)
+}
+
+/*
+	activityRating=sigma((lastSubmissionTime-submissionTime)/(lastSubmissionTime-firstSubmissioonTime)*passTests*(verdict!="OK"?1.2:1))
+*/
+function parseActivityRating(dict,subIds){
+	
+	var rating=0,last=dict[dict.length-1][0],first=dict[0][0]
+	for(var i=0;i<dict.length;i++){
+		rating+=(last-dict[i][0])/(last-first)*dict[i][1]*(subIds[dict[i][0]][1]!="OK"?1.2:1)
+	}
+
+	actrating.innerHTML=rating
+	actrating.style.color=toColor(rating/50000)
+}
+
 function parseJson(){
 	message.innerHTML="Parsing Json..."
 	if(res.status!="OK"){
@@ -266,7 +362,10 @@ function parseJson(){
 	langchart.series[0].setData(dict2)
 	pie.style="display:block"
 	
-	
+	//Parse language rating
+	parseLanguageRating(dict,subs.length)
+
+
 	//Verdict Parse
 	
 	dict=new Object();
@@ -312,6 +411,9 @@ function parseJson(){
 	pointchart.series[0].setData(dict2)
 	point.style="display:block"
 	
+	//Parse Point Rating
+	parsePointRating(dict,subs.length)
+
 	//Tags Parse
 	dict=new Object();
 	for(var i=0;i<subs.length;i++){
@@ -353,6 +455,11 @@ function parseJson(){
 	ptcchart.series[0].setData(dict)
 	ptc.style="display:block"
 	
+	//Parse activity rating
+	parseActivityRating(dict,subIds);
+
+	rating.style="display:block"
+
 	message.innerHTML="OK.All done."+subs.length+" submissions in total."
 }
 
