@@ -14,9 +14,53 @@ var actrating=document.getElementById("actrating")
 
 var enableFuzzy=false
 
+var jp=false
+
+function toggleLang(){
+	jp=!jp
+	alert("Japanese mode:"+jp)
+
+	modifyLang()
+}
+
+function modifyLang(){
+	if(jp){
+		//Japanese
+		document.getElementById("t1").innerHTML="Codeforces提出査読者"
+		input.placeholder="Codeforces アカウント"
+		document.getElementById("b1").innerHTML="クリックしてデータを取"
+		document.getElementById("b2").innerHTML="クリア"
+		document.getElementById("b3").innerHTML="あいまい一致 ON/OFF"
+		document.getElementById("b4").innerHTML="言語"
+
+		document.getElementById("x1").innerHTML="提出のRating"
+		document.getElementById("x2").innerHTML="言語のRating"
+		document.getElementById("x3").innerHTML="配点のRating"
+		document.getElementById("x4").innerHTML="アクティビティのRating"
+		
+	}else{
+		document.getElementById("t1").innerHTML="Codeforces Submission Checker"
+		input.placeholder="Codeforces Handle"
+		document.getElementById("b1").innerHTML="Click to fetch data"
+		document.getElementById("b2").innerHTML="Clear"
+		document.getElementById("b3").innerHTML="Toggle Fuzzy matching"
+		document.getElementById("b4").innerHTML="Japanese/English"
+
+		document.getElementById("x1").innerHTML="User Submission Rating"
+		document.getElementById("x2").innerHTML="Language Rating"
+		document.getElementById("x3").innerHTML="Points Rating"
+		document.getElementById("x4").innerHTML="Activity Rating"
+		
+	}
+}
 function enableFuzzyF(){
 	enableFuzzy=!enableFuzzy
-	alert("Fuzzy Matching Means Merging Similar Languages.\nNow fuzzy matching:"+enableFuzzy)
+	if(jp){
+		alert("'あいまい一致'は類似言語の併合を意味する\nあいまい一致:"+enableFuzzy)
+	}else{
+		alert("Fuzzy Matching Means Merging Similar Languages.\nNow fuzzy matching:"+enableFuzzy)
+	}
+	
 }
 
 var langchart= Highcharts.chart("pie",{
@@ -202,6 +246,9 @@ var ptcchart = Highcharts.chart('ptc', {
 	
 	tooltip:{
 		formatter:function(){
+			if(jp){
+				return "提出"+subIds[this.x][0]+"<br/>問題:"+subIds[this.x][3]+"<br/>結果:"+subIds[this.x][1]+"<br/>提出日時:"+new Date(subIds[this.x][2]*1000)+"<br/>テストカウントに合格:"+this.y	
+			}
 			return "Submission "+subIds[this.x][0]+"<br/>Problem:"+subIds[this.x][3]+"<br/>Verdict:"+subIds[this.x][1]+"<br/>Created at "+new Date(subIds[this.x][2]*1000)+"<br/>Passed "+this.y+" Tests"
 		}
 	}
@@ -209,12 +256,13 @@ var ptcchart = Highcharts.chart('ptc', {
 })
 
 function clears(){
-	message.innerHTML="Abort"
+	message.innerHTML=(jp?"アボート":"Abort")
 	pie.style="display:none"
 	verdict.style="display:none"
 	tag.style="display:none"
 	point.style="display:none"
 	ptc.style="display:none"
+	rating.style="display:none"
 }
 
 function fuzzy(str){
@@ -335,7 +383,7 @@ function parseActivityRating(dict,subIds){
 }
 
 function parseJson(){
-	message.innerHTML="Parsing Json..."
+	message.innerHTML=(jp?"Jsonを解析しています...":"Parsing Json...")
 	if(res.status!="OK"){
 		error(300,"Status is "+res.status+" but 'OK' was expected")
 		return
@@ -460,7 +508,7 @@ function parseJson(){
 
 	rating.style="display:block"
 
-	message.innerHTML="OK.All done."+subs.length+" submissions in total."
+	message.innerHTML=(jp?"OK.全部できた。"+subs.length+"提出":"OK.All done."+subs.length+" submissions in total.")
 }
 
 function get_request(user){
@@ -479,7 +527,12 @@ function get_request(user){
 			
 		}else{
 			if(httpRequest.readyState == 3){
-				message.innerHTML="Downloading Data From Codeforces: ready state "+httpRequest.readyState+" and request status "+httpRequest.status+" is returned"
+				if(jp){
+					message.innerHTML="Codeforcesからのデータのダウンロード: 準備状態:"+httpRequest.readyState+" & リクエストステータス: "+httpRequest.status
+				}else{
+					message.innerHTML="Downloading Data From Codeforces: ready state "+httpRequest.readyState+" and request status "+httpRequest.status+" is returned"
+				}
+				
 			}
 		}
 	};
@@ -488,7 +541,12 @@ function get_request(user){
 }
 
 function fetch(){
-	message.innerHTML="Pending Request To Codeforces..If it takes too long, check if your username is ok"
+	if(jp){
+		message.innerHTML="Codeforcesにリクエストを送信する..時間がかかりすぎる場合は、ユーザー名が正しいかどうかを確認してください"
+	}else{
+		message.innerHTML="Pending Request To Codeforces..If it takes too long, check if your username is ok"
+	}
+	
 	
 	if(input.value==""){
 		error(101,"Input is empty")
