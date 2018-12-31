@@ -7,4 +7,4 @@ Then input a **valid** username and click the "fetch" button and wait for a coup
 
 Watch the graphs!
 
-You can also use the online version [here](https://null.com)
+You can also use the online version [here](https://xiaogenintendo.github.io/Codeforces-Submission-Reviewer/)
