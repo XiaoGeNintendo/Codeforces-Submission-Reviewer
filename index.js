@@ -360,7 +360,7 @@ function get_request(user){
 	
 	
 	var httpRequest = new XMLHttpRequest();
-	httpRequest.open('GET', "http://codeforces.com/api/user.status?handle="+user, true);
+	httpRequest.open('GET', "https://codeforces.com/api/user.status?handle="+user, true);
 	httpRequest.send(null);
 	httpRequest.onreadystatechange = function () {
 		if (httpRequest.readyState == 4 && httpRequest.status == 200) {
