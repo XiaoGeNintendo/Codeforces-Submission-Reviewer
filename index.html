@@ -1,0 +1,30 @@
+<html>
+	<head>
+		<title>CFSC</title>
+		<script src="https://img.hcharts.cn/highcharts/highcharts.js"></script>
+        <script src="https://img.hcharts.cn/highcharts/highcharts-more.js"></script>
+        <script src="https://img.hcharts.cn/highcharts/modules/exporting.js"></script>
+        <script src="https://img.hcharts.cn/highcharts-plugins/highcharts-zh_CN.js"></script>
+	</head>
+	
+	
+	
+	<center>
+		<h1>Codeforces Submission Checker</h1>
+		<input id="user" placeholder="CF Username"></input>
+		
+		<button onclick="fetch()">Click to fetch CF Data</button>
+		<button onclick="clears()">Clear</button>
+		<button onclick="enableFuzzyF()">Toggle Fuzzy Matching</button>
+		<hr/>
+	</center>
+	<b id="message">Abort</b>
+	<hr/>
+	<div id="pie" style="display:none"></div>
+	<div id="verdict" style="display:none"></div>
+	<div id="point" style="display:none"></div>
+	<div id="tag" style="display:none"></div>
+	<div id="ptc" style="display:none"></div>
+	
+	<script src="index.js"></script>
+</html> 
