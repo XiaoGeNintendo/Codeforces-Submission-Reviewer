@@ -13,6 +13,6 @@ Some browsers will tell you that "this website is trying to load a script from a
 
 Make sure you have Internet connection to Codeforces.
 
-Codeforces (c) Copyright 2010-2018 Mike Mirzayanov
+Codeforces (c) Copyright 2010-2018 Mike Mirzayanov <br/>
 The only programming contests Web 2.0 platform
-Server time: Dec/31/2018 11:53:57UTC+8 (d3).
+
