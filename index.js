@@ -7,10 +7,12 @@ var verdict=document.getElementById("verdict")
 var tag=document.getElementById("tag")
 var ptc=document.getElementById("ptc")
 var rating=document.getElementById("rating")
+var diff=document.getElementById("diff")
 
 var langrating=document.getElementById("langrating")
 var pointrating=document.getElementById("pointrating")
 var actrating=document.getElementById("actrating")
+var diffrating=document.getElementById("diffrating")
 
 var enableFuzzy=false
 
@@ -93,6 +95,43 @@ var langchart= Highcharts.chart("pie",{
     series: [{
         type:"pie",
         name:"lang",
+        data:[
+            ["UNKNOWN",1]
+        ]
+    }]
+});
+
+var diffchart= Highcharts.chart("diff",{
+
+
+    title: {
+        text: 'Pie'
+    },
+
+    subtitle:{
+        text:"Difficulties"
+    },
+
+    plotOptions:{
+        pie: {
+           allowPointSelect: true,
+           cursor: 'pointer',
+           dataLabels: {
+              enabled: true,
+              format: '<b>{point.name}</b>: {point.percentage:.1f} % ({point.y})',
+              style: {
+                 color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+              }
+           }
+        }
+    },
+
+    credits:{
+        enabled:false
+    },
+    series: [{
+        type:"pie",
+        name:"submission",
         data:[
             ["UNKNOWN",1]
         ]
@@ -382,6 +421,12 @@ function parseActivityRating(dict,subIds){
 	actrating.style.color=toColor(rating/50000)
 }
 
+function parseDifficultyRating(dict){
+	var rating=dict[parseInt(dict.length/3*2)]
+	diffrating.innerHTML=rating
+	diffrating.style.color=toColor(rating/4000)
+}
+
 function parseJson(){
 	message.innerHTML=(jp?"Jsonを解析しています...":"Parsing Json...")
 	if(res.status!="OK"){
@@ -489,6 +534,42 @@ function parseJson(){
 	tagchart.series[0].setData(dict2)
 	tag.style="display:block"
 	
+	//Difficulty Parse
+	dict=new Object();
+	rat=[];
+	for(var i=0;i<subs.length;i++){
+		var str=subs[i].problem.rating;
+		
+		if(dict[str]==undefined){
+			dict[str]=0
+		}
+		dict[str]++
+	
+		rat.push(parseInt(str));
+	}
+	
+	dict2=new Array();
+	for(x in dict){
+		if(x=="undefined"){
+			dict2.push(["Unknown",dict[x]])
+		}else{
+			dict2.push([x,dict[x]])
+		}
+		
+	}
+	
+	diffchart.series[0].setData(dict2)
+	diff.style="display:block"
+	
+	rat.sort(function(val1,val2){
+		return val1-val2;
+	});
+
+	// Parse Difficulty Rating
+	parseDifficultyRating(rat);
+	
+	
+
 	//PTC Parse
 	
 	dict=new Array();
